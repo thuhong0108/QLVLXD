@@ -1,0 +1,45 @@
+.header {
+    padding-top: 25px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #000;
+    
+    &__main {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0 70px;
+    }
+
+    &__logo, svg {
+        color: white;
+        cursor: pointer;
+    }
+    
+    &__right {
+        display: flex;
+        align-items: center;
+    }
+
+    &__user {
+        display: flex;
+        align-items: center;
+        border-right: 1px solid white;
+        height: 15px;
+        margin-right: 12px;
+        padding-right: 3px;
+
+        button {
+            min-width: 30px;
+        }
+        span {
+            color: white;
+            font-size: 13px;
+        }
+    }
+    
+    &__cart {
+        display: flex;
+    }
+}

@@ -1,0 +1,53 @@
+.detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 80px;
+    margin-top: 60px;
+
+    &__image {
+        width: calc(46% - 40px);
+        height: 500px;
+        object-fit: cover;
+    }
+
+    &__content {
+        width: calc(54% - 40px);
+        padding-right: 125px;
+    }
+
+    &__name {
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 35px;
+        margin-bottom: 10px;
+    }
+
+    &__price {
+        font-size: 20px;
+        font-weight: bold;
+        margin-right: 15px;
+    }
+
+    &__desc {
+        padding-top: 30px;
+        margin: 15px 0 40px;
+        font-size: 15px;
+        color: gray;
+        border-top: 1px solid black;
+    }
+
+    &__payment {
+        display: flex;
+        align-items: center;
+        gap: 0 10px;
+    }
+
+    &__quantity {
+        width: 30%;
+    }
+
+    &__add {
+        width:70%;
+        height: 50px;
+    }
+}

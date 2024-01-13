@@ -1,0 +1,33 @@
+.products {
+    margin-bottom: 120px;
+
+    &__heading {
+        text-align: center;
+        font-size: 30px;
+        margin-bottom: 30px;
+        color: rgb(0, 177, 86);
+    }
+
+    &__top {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
+    &__search {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        b {
+            color: green;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+}
