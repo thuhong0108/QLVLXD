@@ -55,6 +55,7 @@ function Header() {
         setUser(null);
         onCloseMenu();
         toast.success('Đăng xuất thành công');
+        redirectToHomePage();
     }
 
     return ( 

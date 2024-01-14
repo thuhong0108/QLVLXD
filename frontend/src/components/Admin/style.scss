@@ -28,15 +28,6 @@
         font-size: 14px !important;
     }
 
-    &__action {
-        display: flex;
-        align-items: center;
-        gap: 0 15px;
-        svg {
-            cursor: pointer;
-        }
-    }
-
     &__group {
         display: flex;
         gap: 25px;

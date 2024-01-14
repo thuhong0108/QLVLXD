@@ -1,7 +1,7 @@
 
 import { MenuItem, Select, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllCategories } from '../../services/category';
 import { getAllProducts, getProductsByCategory, searchProduct } from '../../services/product';
 import Product from '../Product';
@@ -14,14 +14,11 @@ function Products() {
     const [searchValue, setSearchValue] = useState('');
     const [loading, setLoading] = useState(true);
 
-    const elementRef = useRef(null);
-
     const getAllProductsFn = async () => {
         setLoading(true);
         const response = await getAllProducts();
         setProducts(response.data);
         setLoading(false);
-        elementRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     const getProductsByCategoryFn = async (categoryId) => {
@@ -29,7 +26,6 @@ function Products() {
         const response = await getProductsByCategory(categoryId);
         setProducts(response.data);
         setLoading(false);
-        elementRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     useEffect(() => {
@@ -65,7 +61,7 @@ function Products() {
     }
 
     return ( 
-        <div className="products container" ref={elementRef}>
+        <div className="products container">
             {
                 !loading ? (
                     <>
