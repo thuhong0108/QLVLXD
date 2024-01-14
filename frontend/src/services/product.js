@@ -20,18 +20,9 @@ export const getProductsByCategory = async(categoryId) => {
     }
 }
 
-export const addProduct = async(categoryId, data) => {
+export const addProduct = async(data) => {
     try {
-        const response = await axios.post(`${BASE_URL}/create/${categoryId}`, data);
-        return response.data;
-    } catch (error) {
-        return error.response.data;
-    }
-}
-
-export const editProduct = async(id, data) => {
-    try {
-        const response = await axios.put(`${BASE_URL}/edit/${id}`, data);
+        const response = await axios.post(`${BASE_URL}/create/${data.category}`, data);
         return response.data;
     } catch (error) {
         return error.response.data;
@@ -53,19 +44,5 @@ export const searchProduct = async(value) => {
         return response.data;
     } catch (error) {
         return error.response.data;
-    }
-}
-
-
-export const uploadImage = async(data) => {
-    try {
-        const response = await fetch('https://api.cloudinary.com/v1_1/ddwurilrw/image/upload', {
-            method: 'POST',
-            body: data
-        })
-        
-        return response.json();
-    } catch (error) {
-        return error.message;
     }
 }

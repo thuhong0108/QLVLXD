@@ -2,35 +2,42 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog,
     DialogTitle, DialogContent, TextField, DialogActions, Select, MenuItem } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { addProduct, deleteProduct, getAllProducts, uploadImage } from '../../services/product';
+import { addProduct, deleteProduct, getAllProducts } from '../../services/product';
 import { formatPrice } from '../../services/common';
 import './style.scss';
 import CircularProgress from '@mui/material/CircularProgress';
+//1 thư viện hỗ trợ tạo form
 import { useFormik } from 'formik';
+//hiện thị thông báo
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getAllCategories } from '../../services/category';
 
 function Admin() {
+    //State. Khi cần lưu dữ liệu nào đó để lưu dữ liệu
     const navigate = useNavigate();
 
     const [products, setProducts] = useState([]);
+
     const [categories, setCategories] = useState([]);
 
+    //dùng để mở hoặc đóng dialog mặc định là false
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
 
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user?.isAdmin) {
         navigate('/');
     }
 
+    //tạo from
     const form = useFormik({
-        initialValues: { _id: '', name: '', description: '', price: '', category: '' }
+        //gồm những giá trị khởi tạo
+        initialValues: { name: '', description: '', price: '', category: '', image: '' }
     });
 
+    //khi nào gọi api
     useEffect(() => {
         getAllProductsFn();
     }, []);
@@ -43,15 +50,10 @@ function Admin() {
         setLoading(false);
     }
 
-    // hàm này gọi mỗi khi chọn file từ máy tính
-    const handleImageChange = (event) => {
-        const files = event.target.files;
-        setSelectedFile(files[0]);
-    }
-
     // mở dialog
     const openDialog = async () => {
         setOpen(true);
+        // lấy tất cả thông tin của categories
         const response = await getAllCategories();
         setCategories(response.data);
     }
@@ -60,7 +62,6 @@ function Admin() {
     const closeDialog = () => {
         setOpen(false);
         form.resetForm();
-        setSelectedFile(null);
     }
 
     // xoá sản phẩm
@@ -70,27 +71,27 @@ function Admin() {
         toast.success('Xóa sản phẩm thành công');
     }
 
+    //xử lý sự kiện khi nhấn nút lưu
     const onSubmit = async () => {
+        //hàm kiểm tra form có valid hay ch
         if (isValidForm()) {
             setLoading(true);
 
-            // tải ảnh lên cloud
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-            formData.append('upload_preset', 'instagramimages');
-            
-            // trả về file, file.secure_url => link ảnh
-            var file = await uploadImage(formData);
+            const data = {
+                name: form.values.name,
+                description: form.values.description,
+                price: form.values.price,
+                category: form.values.category,
+                image: form.values.image
+            }
 
-            const { name, description, price, category } = form.values;
-            const data = { name, description, price, image: file.secure_url };
+            await addProduct(data);
 
-            await addProduct(category, data);
             setLoading(false);
-            toast.success('Thêm sản phẩm thành công');
-
             closeDialog();
             getAllProductsFn();
+            
+            toast.success('Thêm sản phẩm thành công');
         } else {
             toast.error('Hãy nhập đầy đủ thông tin');
         }
@@ -99,7 +100,7 @@ function Admin() {
     // kiểm tra form có nhập đủ dữ liệu chưa
     const isValidForm = () => {
         const { name, description, price, category } = form.values;
-        return !!(name && description && category && price && selectedFile);
+        return name && description && category && price;
     }
 
     return ( 
@@ -109,7 +110,8 @@ function Admin() {
                     <>
                         <h2>Quản lí sản phẩm</h2>
                         <div className='admin__top'>
-                            <Button variant="contained" onClick={() => openDialog()}>Thêm mới</Button>
+                            {/* nút thêm sản phẩm */}
+                            <Button variant="contained" onClick={openDialog}>Thêm mới</Button>
                             <p>Có tất cả <b>{products?.length}</b> sản phẩm</p>
                         </div>
                         <TableContainer component={Paper}>
@@ -125,10 +127,11 @@ function Admin() {
                                 </TableHead>
                                 <TableBody>
                                     {
+                                        //khi map qua cần id
                                         products.map(item => (
                                             <TableRow key={item._id}>
                                                 <TableCell>
-                                                    <img className='admin__image' src={item.image} />
+                                                    <img className='admin__image' src={item.image} alt='' />
                                                 </TableCell>
                                                 <TableCell>{item.name}</TableCell>
                                                 <TableCell>{item.category.name}</TableCell>
@@ -181,7 +184,7 @@ function Admin() {
                                 </div>
                                 <div className='admin__row'>
                                     <label>Hình ảnh</label>
-                                    <TextField id="file" type="file" fullWidth onChange={(event) => handleImageChange(event)} />
+                                    <TextField fullWidth id="image" value={form.values.image} onChange={form.handleChange} />
                                 </div>
                             </DialogContent>
                             <DialogActions>

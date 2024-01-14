@@ -26,6 +26,13 @@
     
     td {
         font-size: 14px !important;
+        svg {
+            cursor: pointer;
+        }
+    }
+
+    button {
+        cursor: pointer;
     }
 
     &__group {
